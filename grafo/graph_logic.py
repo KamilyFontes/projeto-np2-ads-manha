@@ -1,46 +1,37 @@
+graph = {"Clara": ["Carlos", "Daniela"], 
+         "Carlos": ["Daniela","Clara", "Mauro"], 
+         "Daniela": ["Clara", "Carlos", "Mauro"], "Mauro": ["Carlos", "Daniela"]}
 
-# graph_logic.py — você edita APENAS este arquivo nesta atividade.
-# Dica: use apenas LISTAS para a fila/estrutura de dados (nada de deque).
-# Você pode fazer BFS com:
-#   fila = [a]; visitados = [a]
-#   while fila:
-#       u = fila.pop(0)          # remove o primeiro
-#       if u == b: return True
-#       for v in graph.get(u, []):
-#           if v not in visitados:
-#               visitados.append(v)
-#               fila.append(v)
-#   return False
-#
-# Alternativamente, pode usar DFS com uma lista como "pilha":
-#   pilha = [a]; visitados = []
-#   while pilha:
-#       u = pilha.pop()          # remove o último
-#       ...
-#   return False
+def connected(graph, a, b): # 'a' = nó/vértice onde começa, 'b' = nó/vértice que queremos *alcançar*
+    
 
-def connected(graph, a, b):
-    """
-    Retorna True se existe um caminho (qualquer) entre 'a' e 'b' no grafo não direcionado.
-    'graph' é um dicionário: { "Ana": ["Beto", ...], ... }
-    Implemente uma busca simples (BFS com listas ou DFS com listas).
-    Tratamento recomendado:
-      - Se 'a' ou 'b' não existirem como vértices, você pode retornar False OU levantar ValueError.
-      - Pode normalizar maiúsculas/minúsculas, desde que seja consistente.
-    """
-    # TODO: implemente aqui usando APENAS listas.
-    # Exemplo (BFS com lista), em pseudocódigo:
-    # if a not in graph or b not in graph:
-    #     return False
-    # fila = [a]
-    # visitados = [a]
-    # while fila:
-    #     u = fila.pop(0)
-    #     if u == b:
-    #         return True
-    #     for v in graph.get(u, []):
-    #         if v not in visitados:
-    #             visitados.append(v)
-    #             fila.append(v)
-    # return False
-    raise NotImplementedError("Implemente a função connected usando apenas listas.")
+    if a not in graph:
+        raise ValueError(f"{a} não existe no grafo.") # "raise" = para o código
+
+    if b not in graph:
+        raise ValueError(f"{b} não existe no grafo.")
+    
+    if a == b:
+        return True # se são os mesmos valores, é desnecessário contiuar
+    
+    if b in graph[a]: # se b está na lista de amigos de a
+        return True
+    
+    else:
+        print(f"{a} e {b} não estão ligados diretamente.")
+    
+    # bfs (Busca em Largura); conecta a todos e verifica liga de forma DIRETA OU INDIRETA
+    fila_visitas = [a]
+    descobertos = [a]
+
+    while fila_visitas:
+        u = fila_visitas.pop(0)
+
+        if u == b:
+            return True
+        
+        for v in graph[u]:
+            if v not in descobertos:
+                descobertos.append(v) 
+                fila_visitas.append(v)
+    return False
